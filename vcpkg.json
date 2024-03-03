@@ -1,0 +1,36 @@
+{
+  "name" : "cg2",
+  "version-string" : "1.0.0",
+  "builtin-baseline" : "37c3e63a1306562f7f59c4c3c8892ddd50fdf992",
+  "dependencies" : [ {
+    "name" : "opengl",
+    "version>=" : "2022-12-04#3"
+  }, {
+    "name" : "soil",
+    "version>=" : "2021-04-22#2"
+  }, {
+    "name" : "vcpkg-cmake-config",
+    "version>=" : "2022-02-06#1"
+  }, {
+    "name" : "vcpkg-cmake-get-vars",
+    "version>=" : "2023-12-31"
+  }, {
+    "name" : "vcpkg-cmake",
+    "version>=" : "2023-05-04"
+  }, {
+    "name" : "opengl-registry",
+    "version>=" : "2024-02-10#1"
+  }, {
+    "name" : "glfw3",
+    "version>=" : "3.3.9"
+  }, {
+    "name" : "freeglut",
+    "version>=" : "3.4.0#1"
+  }, {
+    "name" : "stb",
+    "version>=" : "2023-04-11#1"
+  }, {
+    "name" : "glew",
+    "version>=" : "2.2.0#3"
+  } ]
+}

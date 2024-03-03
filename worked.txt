@@ -1,0 +1,79 @@
+#include <GLFW/glfw3.h>
+#include <SOIL/SOIL.h>
+#include <iostream>
+
+GLuint texture;
+
+void init() {
+    glEnable(GL_TEXTURE_2D);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+    texture = SOIL_load_OGL_texture(
+            "image.jpg",
+            SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID,
+            SOIL_FLAG_INVERT_Y
+    );
+
+    if(texture == 0) {
+        std::cerr << "Ошибка загрузки изображения: '" << SOIL_last_result() << "'\n";
+    }
+}
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glLoadIdentity();
+    glEnable(GL_LIGHTING);
+
+    GLfloat light_position[] = {0.0, 1.0, 1.0, 0.0};
+    GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+    glEnable(GL_LIGHT0);
+
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0, 0.0); glVertex2f(-1.0, -1.0);
+    glTexCoord2f(1.0, 0.0); glVertex2f(1.0, -1.0);
+    glTexCoord2f(1.0, 1.0); glVertex2f(1.0, 1.0);
+    glTexCoord2f(0.0, 1.0); glVertex2f(-1.0, 1.0);
+    glEnd();
+
+    glFlush();
+}
+
+int main() {
+    if (!glfwInit()) {
+        std::cerr << "Ошибка инициализации GLFW\n";
+        return -1;
+    }
+
+    GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL Texture", NULL, NULL);
+    if (!window) {
+        std::cerr << "Ошибка создания окна GLFW\n";
+        glfwTerminate();
+        return -1;
+    }
+
+    glfwMakeContextCurrent(window);
+
+    if (glfwInit() == 0) {
+        std::cerr << "Ошибка инициализации GLEW\n";
+        return -1;
+    }
+
+    init();
+
+    while (!glfwWindowShouldClose(window)) {
+        display();
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    glfwDestroyWindow(window);
+    glfwTerminate();
+
+    return 0;
+}
