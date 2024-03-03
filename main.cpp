@@ -51,7 +51,7 @@ const char* fragmentShaderSource = R"glsl(
         vec3 light = diffuse * attenuation;
 
         // Результирующий цвет
-        vec3 result = light + shadow;
+        vec3 result = light * attenuation + shadow * (1 - attenuation);
         FragColor = vec4(result, 1.0);
     }
 )glsl";
@@ -63,7 +63,7 @@ const char* fragmentShaderSource = R"glsl(
 
 int main() {
     glfwInit();
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Red Square with Basic Lighting", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(900, 900, "Red Square with Basic Lighting", nullptr, nullptr);
     glfwMakeContextCurrent(window);
     glewInit();
 
@@ -97,10 +97,10 @@ int main() {
 
     float vertices[] = {
             // Позиции вершин  // Нормали
-            -0.5f, -0.5f,     0.0f, 0.0f, 1.0f,
-            0.5f, -0.5f,      0.0f, 0.0f, 1.0f,
-            0.5f, 0.5f,       0.0f, 0.0f, 1.0f,
-            -0.5f, 0.5f,      0.0f, 0.0f, 1.0f
+            -1.0f, -1.0f,     0.0f, 0.0f, 1.0f,
+            1.0f, -1.0f,      0.0f, 0.0f, 1.0f,
+            1.0f, 1.0f,       0.0f, 0.0f, 1.0f,
+            -1.0f, 1.0f,      0.0f, 0.0f, 1.0f
     };
 
     unsigned int indices[] = {
