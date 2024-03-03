@@ -1,6 +1,9 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
 
 // Вершинный шейдер
 const char* vertexShaderSource = R"glsl(
@@ -91,9 +94,8 @@ int main() {
 
 // Значения освещения
 // Значения освещения
-    glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f); // белый цвет света
-    glUniform3f(lightPosLoc, 0.0f, 0.0f, 0.5f);  // точечный свет сверху (примерно в центре экрана)
-    glUniform3f(viewPosLoc, 0.0f, 0.0f, 1.0f);   // позиция камеры/наблюдателя
+    float light_color [3]{ 1.0f, 1.0f, 1.0f};
+    float light_pos [3] {0, 0, 0.5};
 
     float vertices[] = {
             // Позиции вершин  // Нормали
@@ -132,7 +134,18 @@ int main() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    (void)io;
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
     while (!glfwWindowShouldClose(window)) {
+        glUniform3f(lightColorLoc, light_color[0], light_color[1], light_color[2]); // белый цвет света
+        glUniform3f(lightPosLoc, light_pos[0], light_pos[1], light_pos[2]);  // точечный свет сверху (примерно в центре экрана)
+        glUniform3f(viewPosLoc, 0.0f, 0.0f, 1.0f);   // позиция камеры/наблюдателя
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -140,6 +153,16 @@ int main() {
         glBindVertexArray(VAO);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        ImGui::Begin("Settings");
+        ImGui::ColorEdit3("Color light", light_color);
+        ImGui::SliderFloat3("Light pos", light_pos, -3, 3);
+        ImGui::End();
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
         glfwPollEvents();

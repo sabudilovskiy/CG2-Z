@@ -32,5 +32,8 @@
   }, {
     "name" : "glew",
     "version>=" : "2.2.0#3"
+  }, {
+    "name" : "imgui",
+    "version>=" : "1.90.2"
   } ]
 }
